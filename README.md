@@ -118,6 +118,33 @@ function MyComponent() {
 
 未登录访问受保护路由、会话过期（401 / 业务码 12010）、退出登录，均通过 `src/utils/loginFlow.ts` 按上述模式处理。
 
+## 全局提示（Toast）
+
+项目已集成 **Ant Design message / notification** 封装（`src/utils/toast.ts`），与 `ConfigProvider` 主题一致，**未引入 react-toastify**（避免与 antd 双套 UI 冲突）。
+
+```tsx
+import { toast, showAppError } from '~/utils/toast';
+import { AppError } from '~/services/http';
+
+toast.success('保存成功');
+toast.error('操作失败');
+
+// 右上角通知，默认带 showProgress 自动关闭倒计时条（antd ≥5.18）
+toast.notify.success('操作成功', '数据已保存');
+toast.notify.error('提交失败', '请检查表单后重试', { duration: 5 });
+// 不需要进度条时：toast.notify.info('提示', undefined, { showProgress: false });
+
+try {
+  await request('/v1/...');
+} catch (error) {
+  if (error instanceof AppError) showAppError(error);
+}
+```
+
+`App.tsx` 已通过 `AppWithToast` 挂载 antd `App` 上下文，可在组件外（如 axios 拦截器）安全调用 `toast.*`。
+
+`toast.notify.*` 默认开启 `showProgress`（通知自动关闭倒计时条）；短提示请用 `toast.success` 等 message API。
+
 ## 最小化配置
 
 复制 `.env.minimal.example` 为 `.env` 可快速关闭可选功能：
