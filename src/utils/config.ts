@@ -12,6 +12,9 @@ export const appConfig = {
   navLayout: (env.VITE_NAV_LAYOUT as NavLayout) || 'top',
   enableFloat: env.VITE_ENABLE_FLOAT !== 'false',
   enableGtm: env.VITE_ENABLE_GTM !== 'false' && !!env.VITE_GTM_ID,
+  authSceneId: env.VITE_AUTH_SCENE_ID || 'default',
+  contactQrcodeUrl: env.VITE_CONTACT_QRCODE_URL || '',
+  supportTitle: env.VITE_SUPPORT_TITLE || `${env.VITE_APP_TITLE || 'Base UI'} 技术支持`,
 } as const;
 
 export const isLeftNavLayout = appConfig.navLayout === 'left';

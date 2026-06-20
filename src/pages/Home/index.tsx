@@ -1,8 +1,6 @@
 import Footer from './Footer';
 
 import './index.css';
-import { useEffect } from 'react';
-import { getLoginModalStore } from '~/components/LoginModal/store';
 import { useAppSEO } from '~/hooks/useAppSEO';
 import { appConfig } from '~/utils/config';
 
@@ -15,10 +13,6 @@ const HomePage = () => {
     robots: 'index, follow',
     twitterCard: 'summary_large_image',
   });
-
-  useEffect(() => {
-    getLoginModalStore().open = false;
-  }, []);
 
   return (
     <div className="home-page overflow-hidden-x">

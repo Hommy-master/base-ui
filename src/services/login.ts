@@ -1,30 +1,27 @@
+import { appConfig } from '~/utils/config';
 import { type BaseResponse, request } from './request';
 
 export type UserLoginParams = { phone: string; pass: string };
 
 interface UserCheckResult {
-  exists: boolean; // 用户名是否存在
+  exists: boolean;
 }
 
 export enum UserRole {
-  // 普通用户
   Normal = 'normal',
-  // 智能体创作者，能添加智能体，赚取收入
-  Creater = 'creator',
-  // 管理员，能管理所有智能体，包括删除和编辑
   Admin = 'admin',
 }
 
 export interface UserLoginResult {
-  id: string; // 用户ID
-  name: string; // 用户名
-  user_type: number;
-  points: number; // 积分
-  apiKey: string;
-  role: UserRole;
-  vipLevel: number; // 会员等级 0-普通用户，1-普通会员，2- SVIP，3- SVIP
-  vipExpireAt: number; // 会员过期时间
-  token?: string; // 认证令牌
+  id: string;
+  name: string;
+  role?: UserRole;
+  token?: string;
+  user_type?: number;
+  points?: number;
+  apiKey?: string;
+  vipLevel?: number;
+  vipExpireAt?: number;
 }
 
 export interface QRcodeResult {
@@ -52,20 +49,19 @@ export async function pwdlogin(params: UserLoginParams): Promise<BaseResponse<Us
 export async function getPhoneCode(phone: string) {
   return await request(`/openapi/v1/user/auth/sms`, {
     method: 'post',
-    data: {
-      phone,
-    },
+    data: { phone },
   });
 }
 
 export async function fetchQRCode(): Promise<BaseResponse<QRcodeResult>> {
-  return await request(`/openapi/v1/user/auth/qrcode?sceneID=80001`, {
+  return await request(`/openapi/v1/user/auth/qrcode?sceneID=${appConfig.authSceneId}`, {
     method: 'get',
   });
 }
 
 export async function fetchQRCodeLogin(ticket: string): Promise<BaseResponse<UserLoginResult>> {
-  return await request(`/openapi/v1/user/auth/qrcode/status?ticket=${ticket}&sceneID=80001`, {
-    method: 'get',
-  });
+  return await request(
+    `/openapi/v1/user/auth/qrcode/status?ticket=${ticket}&sceneID=${appConfig.authSceneId}`,
+    { method: 'get' }
+  );
 }

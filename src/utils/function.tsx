@@ -1,6 +1,4 @@
 import { capitalize, map as lodashMap, sum as lodashSum, words, isNumber } from 'lodash';
-import { G_EmptyStr, USER_TYPE, USER_TYPE_TEXT } from './const';
-import { formatToDateTimeMin } from './date';
 
 export function getFullName(
   filePathName: string | null,
@@ -173,22 +171,6 @@ export const hexToRgb = (hex: string) => {
   }
   const [, r, g, b] = result;
   return `${parseInt(r ?? '0', 16)}, ${parseInt(g ?? '0', 16)}, ${parseInt(b ?? '0', 16)}`;
-};
-
-export const isSVIPCheck = (vipLevel: number) => {
-  return vipLevel >= 2;
-};
-
-export const getVipInfo = (vipLevel: number) => {
-  return {
-    class: USER_TYPE[vipLevel] || USER_TYPE[0],
-    text: USER_TYPE_TEXT[vipLevel] || USER_TYPE_TEXT[0],
-  };
-};
-
-export const getVipExpireShow = (userInfo: any) => {
-  const { vipLevel = 0, vipExpireAt } = userInfo || {};
-  return vipLevel > 0 ? formatToDateTimeMin(vipExpireAt) : G_EmptyStr;
 };
 
 // 用于判断是否是移动设备

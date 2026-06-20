@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import { NavigateFunction } from 'react-router-dom';
+import { AUTH_TOKEN_KEY } from '~/context/AuthContext';
 
-class AspaceError extends Error {
+export class AppError extends Error {
   errorMessage: string;
   errorCode: number;
   resp: AxiosError;
@@ -9,7 +10,7 @@ class AspaceError extends Error {
     super(message);
     this.errorCode = code;
     this.errorMessage = message;
-    this.name = 'AspaceError';
+    this.name = 'AppError';
     this.resp = resp;
   }
 }
@@ -17,7 +18,7 @@ class AspaceError extends Error {
 export const setupAxiosInterceptors = (navigate: NavigateFunction) => {
   const setupIndex = axios.interceptors.response.use(
     (response) => response,
-    (error): Promise<AspaceError> | void => {
+    (error): Promise<AppError> | void => {
       let message: string;
       let code: number;
       if (error.response) {
@@ -44,7 +45,7 @@ export const setupAxiosInterceptors = (navigate: NavigateFunction) => {
         code = 500;
       }
 
-      return Promise.reject(new AspaceError(message, code, error));
+      return Promise.reject(new AppError(message, code, error));
     }
   );
 

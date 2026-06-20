@@ -25,15 +25,22 @@ pnpm dev
 
 复制 `.env.example` 为 `.env` 后修改：
 
-| 变量                    | 说明                    | 默认值                |
-| ----------------------- | ----------------------- | --------------------- |
-| `VITE_APP_TITLE`        | 应用名称                | Base UI               |
-| `VITE_APP_DESCRIPTION`  | 应用描述                | -                     |
-| `VITE_SITE_URL`         | 站点 URL                | http://localhost:8008 |
-| `VITE_NAV_LAYOUT`       | 导航布局 `top` / `left` | top                   |
-| `VITE_API_PROXY_TARGET` | 开发代理目标            | http://127.0.0.1:3000 |
-| `VITE_GTM_ID`           | Google Tag Manager ID   | 空（不启用）          |
-| `VITE_ENABLE_FLOAT`     | 是否显示悬浮客服        | true                  |
+| 变量                      | 说明                    | 默认值                |
+| ------------------------- | ----------------------- | --------------------- |
+| `VITE_APP_TITLE`          | 应用名称                | Base UI               |
+| `VITE_APP_DESCRIPTION`    | 应用描述                | -                     |
+| `VITE_SITE_URL`           | 站点 URL                | http://localhost:8008 |
+| `VITE_NAV_LAYOUT`         | 导航布局 `top` / `left` | top                   |
+| `VITE_API_PROXY_TARGET`   | 开发代理目标            | http://127.0.0.1:3000 |
+| `VITE_GTM_ID`             | Google Tag Manager ID   | 空（不启用）          |
+| `VITE_ENABLE_FLOAT`       | 是否显示悬浮客服        | true                  |
+| `VITE_AUTH_SCENE_ID`      | 扫码登录场景 ID         | default               |
+| `VITE_CONTACT_QRCODE_URL` | 客服二维码图片 URL      | 空（不显示二维码）    |
+| `VITE_SUPPORT_TITLE`      | 客服悬浮窗标题          | `{应用名} 技术支持`   |
+
+## 登录流程
+
+未登录访问受保护路由、会话过期（401 / 业务码 12010）、退出登录，均统一跳转 `/login` 页面。
 
 ## 项目结构
 
@@ -71,6 +78,6 @@ src/
 - Vite 5 + SWC
 - Ant Design 5
 - Tailwind CSS 3
-- Axios + Zod
+- Axios
 - Valtio（轻量状态管理）
 - Vitest + ESLint + Prettier + Husky

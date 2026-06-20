@@ -181,9 +181,9 @@
   background: linear-gradient(to right, #6e8efb, #a777e3);
 }
 
-/* 剪映小助手：深色底 */
-.feature-tag.jianying::before {
-  background: linear-gradient(to right, #1a1a1c, #615a5b);
+/* accent 主题色 */
+.feature-tag.accent::before {
+  background: linear-gradient(to right, #356bfd, #5c89ff);
 }
 
 .feature-tag.video .feature-icon {
@@ -201,20 +201,10 @@
   box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
 }
 
-.feature-tag.jianying .feature-icon {
-  background: linear-gradient(145deg, #2a2a2e 0%, #121214 55%, #2a0a10 100%);
-  box-shadow:
-    0 5px 16px rgba(43, 41, 41, 0.35),
-    0 0 0 1px rgba(73, 72, 72, 0.25) inset;
+.feature-tag.accent .feature-icon {
+  background: linear-gradient(135deg, #356bfd, #5c89ff);
+  box-shadow: 0 5px 16px rgba(53, 107, 253, 0.35);
   color: #fff;
-}
-
-.feature-tag.jianying .login-feature-jianying-icon {
-  display: block;
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  pointer-events: none;
 }
 
 .feature-tag:hover .feature-icon {
@@ -253,8 +243,8 @@
   background: linear-gradient(135deg, #6e8efb, #a777e3);
 }
 
-.feature-tag.jianying .feature-particle {
-  background: linear-gradient(135deg, #fe2c55, #ff6b81);
+.feature-tag.accent .feature-particle {
+  background: linear-gradient(135deg, #356bfd, #5c89ff);
 }
 
 .feature-pulse {

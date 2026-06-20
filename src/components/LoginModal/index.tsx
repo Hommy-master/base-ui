@@ -35,7 +35,7 @@ const LoginModal = () => {
       <div className="features">
         <FeatureTag icon={<FaBolt />} name="快速开发" color="video" animation="pulse" />
         <FeatureTag icon={<FaShieldAlt />} name="安全可靠" color="email" animation="float" />
-        <FeatureTag icon={<FaRocket />} name="开箱即用" color="jianying" animation="rotate" />
+        <FeatureTag icon={<FaRocket />} name="开箱即用" color="accent" animation="rotate" />
       </div>
     </Modal>
   );

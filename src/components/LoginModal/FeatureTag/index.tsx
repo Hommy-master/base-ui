@@ -13,7 +13,7 @@ interface Particle {
 interface FeatureTagProps {
   icon: React.ReactNode;
   name: string;
-  color: 'video' | 'wechat' | 'email' | 'jianying';
+  color: 'video' | 'wechat' | 'email' | 'accent';
   animation: 'pulse' | 'float' | 'rotate';
 }
 
