@@ -2,6 +2,11 @@
   "name": "base-ui",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  },
   "dependencies": {
     "@ant-design/cssinjs": "^1.23.0",
     "@ant-design/icons": "^5.5.0",
@@ -17,8 +22,7 @@
     "react-gtm-module": "^2.0.11",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.20.1",
-    "valtio": "^2.1.4",
-    "zod": "^3.23.8"
+    "valtio": "^2.1.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
@@ -37,6 +41,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^15.15.0",
+    "jsdom": "^25.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "mockjs": "^1.1.0",
@@ -63,10 +68,12 @@
     "build": "pnpm clean:dist && pnpm generate-sitemap && vite build",
     "preview": "vite preview",
     "lint": "eslint src",
+    "lint:css": "stylelint \"src/**/*.css\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json,md}\" \"*.{json,md,html,mjs}\" \".*rc.cjs\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json,md}\" \"*.{json,md,html,mjs}\" \".*rc.cjs\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
+    "test:run": "vitest run",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "clean:dist": "rimraf dist",
     "clean:cache": "rimraf node_modules/.cache/ && rimraf node_modules/.vite",

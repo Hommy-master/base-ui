@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Spin } from 'antd';
-import { setupAxiosInterceptors } from '~/requestError';
+import { setupHttpInterceptors } from '~/services/http';
 import { ProtectedRoute } from '~/context/AuthContext';
 import GtmRouterTracker from './gtmRouterTracker';
 import NotFound from '~/pages/404';
@@ -17,7 +17,7 @@ const AppRoutes = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const teardown = setupAxiosInterceptors(navigate);
+    const teardown = setupHttpInterceptors(navigate);
     return teardown;
   }, [navigate]);
 

@@ -19,7 +19,10 @@ pnpm dev
 | `pnpm build`     | 生产构建                    |
 | `pnpm preview`   | 预览构建产物                |
 | `pnpm lint`      | ESLint 检查                 |
+| `pnpm lint:css`  | Stylelint 检查 CSS          |
 | `pnpm typecheck` | TypeScript 类型检查         |
+| `pnpm test:run`  | 运行单元测试（单次）        |
+| `pnpm test`      | 运行单元测试（watch 模式）  |
 
 ## 环境变量
 
@@ -52,7 +55,7 @@ src/
 ├── hooks/              # 自定义 Hooks
 ├── pages/              # 页面（Home、Login、404…）
 ├── routes/             # 路由 & 菜单配置
-├── services/           # API 请求层
+├── services/           # API 请求层（http.ts 统一封装）
 ├── style/              # 全局 CSS
 └── utils/              # 工具函数
 ```
@@ -80,4 +83,4 @@ src/
 - Tailwind CSS 3
 - Axios
 - Valtio（轻量状态管理）
-- Vitest + ESLint + Prettier + Husky
+- Vitest + Stylelint + ESLint + Prettier + Husky

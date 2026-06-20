@@ -120,10 +120,6 @@
   }
 }
 
-.zt-nav.zt-nav_vertical .nav-item::after {
-  display: none;
-}
-
 .zt-sider {
   background: var(--sidebar-background) !important;
   box-shadow: var(--sidebar-shadow);

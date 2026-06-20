@@ -1,5 +1,5 @@
 import { appConfig } from '~/utils/config';
-import { type BaseResponse, request } from './request';
+import { type BaseResponse, request } from './http';
 
 export type UserLoginParams = { phone: string; pass: string };
 

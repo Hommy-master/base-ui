@@ -32,8 +32,14 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Lint CSS
+        run: pnpm lint:css
+
       - name: Typecheck
         run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test:run
 
       - name: Build Project
         run: pnpm run build

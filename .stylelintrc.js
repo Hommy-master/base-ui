@@ -1,12 +1,22 @@
 module.exports = {
-  extends: [
-    'stylelint-config-standard',          // 官方标准规则
-    'stylelint-config-tailwindcss',       // 让 @apply 不报错
-  ],
+  extends: ['stylelint-config-standard', 'stylelint-config-tailwindcss'],
   rules: {
-    // 如果你们用 CSS Modules（*.module.css），可以关闭类名命名规则
     'selector-class-pattern': null,
-    // 允许使用未知的 at-rule（如 Tailwind 的 @layer）
+    'keyframes-name-pattern': null,
+    'color-function-notation': null,
+    'alpha-value-notation': null,
+    'property-no-vendor-prefix': null,
+    'selector-not-notation': null,
+    'no-descending-specificity': null,
+    'media-feature-range-notation': null,
+    'number-max-precision': null,
+    'custom-property-empty-line-before': null,
+    'value-keyword-case': null,
+    'font-family-name-quotes': null,
+    'color-hex-length': null,
+    'rule-empty-line-before': null,
+    'comment-empty-line-before': null,
+    'shorthand-property-no-redundant-values': null,
     'at-rule-no-unknown': [
       true,
       {

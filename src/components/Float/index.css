@@ -135,7 +135,6 @@
       transition: all 0.3s ease;
       animation: floatGlow 1.5s infinite alternate;
       box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.5);
-      position: relative;
 
       svg {
         color: white;
