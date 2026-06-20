@@ -1,5 +1,5 @@
-import { ArrowsClockwise, QrCode } from '@phosphor-icons/react';
-import { Button, Flex, message, Spin } from 'antd';
+import { FaQrcode, FaSync } from 'react-icons/fa';
+import { Button, Flex, Spin } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '~/context/AuthContext ';
 import { fetchQRCode, fetchQRCodeLogin } from '~/services/login';
@@ -101,17 +101,13 @@ const QrcodeLogin = () => {
               justify="center"
             >
               {expireStr}
-              <Button
-                type="link"
-                onClick={getQrcode}
-                icon={<ArrowsClockwise size={24} weight="bold" />}
-              />
+              <Button type="link" onClick={getQrcode} icon={<FaSync size={24} />} />
             </Flex>
           </span>
         )}
       </Flex>
       <span className="qrcode-login-text mt-4">
-        <QrCode className="svg-inline--fa fa-qrcode qrcode-tip-icon" weight="bold" />
+        <FaQrcode className="svg-inline--fa fa-qrcode qrcode-tip-icon" />
         请使用微信扫描二维码登录
       </span>
     </Flex>

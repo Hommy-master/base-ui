@@ -3,11 +3,6 @@ import TagManager from 'react-gtm-module';
 
 // 初始化 GTM
 export const initGTM = (gtmId: string) => {
-  // 按需加载GTM（生产环境才初始化）
-  // if (process.env.NODE_ENV !== 'production') {
-  //   console.info('GTM is only initialized in production environment');
-  //   return;
-  // }
   // 确保 dataLayer 数组存在
   window.dataLayer = window.dataLayer || [];
 
@@ -22,9 +17,6 @@ export const initGTM = (gtmId: string) => {
 
 // 跟踪事件的类型安全方法
 export const trackEvent = (eventName: string, params: Record<string, any> = {}) => {
-  // if (process.env.NODE_ENV !== 'production') {
-  //   return;
-  // }
   if (!window.dataLayer) {
     console.warn('dataLayer not initialized');
     return;

@@ -28,8 +28,6 @@ declare let ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
   | "site"
   | undefined;
 
-declare const REACT_APP_ENV: "test" | "dev" | "pre" | false;
-
 declare module 'react-gtm-module' {
   interface TagManagerArgs {
     gtmId: string;
@@ -48,6 +46,17 @@ declare module 'react-gtm-module' {
   };
 
   export default TagManager;
+}
+
+interface ImportMetaEnv {
+  /** 应用运行环境，在 .env 文件中定义 */
+  readonly VITE_APP_ENV?: 'test' | 'dev' | 'pre' | 'prod';
+  // 如果有其他自定义变量，继续添加：
+  // readonly VITE_API_BASE_URL?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
 
 interface Window {

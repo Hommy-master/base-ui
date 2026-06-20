@@ -1,5 +1,3 @@
-// import path from 'path';
-// import million from 'million/compiler'
 import { defineConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import svg from 'vite-plugin-svgr';
@@ -32,7 +30,6 @@ export default defineConfig({
     assetsDir: '.',
   },
   plugins: [
-    // million.vite({ auto: true }),
     viteMockServe({
       mockPath: 'mock', // 指定 mock 目录（类似 Umi 结构）
       enable: process.env.NODE_ENV === 'development' && !!process.env.VITE_MOCK,

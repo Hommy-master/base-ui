@@ -1,5 +1,5 @@
-import { Flex, Dropdown, Button, Input, Avatar, Divider, Typography, message } from 'antd';
-import { CaretDown, List, User, Wallet, SignOut } from '@phosphor-icons/react';
+import { Flex, Dropdown, Button, Avatar, Divider, Typography, message } from 'antd';
+import { FaBars, FaCaretDown, FaSignOutAlt, FaUser, FaWallet } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { type RouteCfgType, RoutesCfg } from '~/routes/const';
@@ -44,7 +44,7 @@ export const MobileBottomNav = () => {
                 }
               }}
             >
-              <item.icon weight={isActive ? 'fill' : 'regular'} size={22} />
+              <item.icon size={22} className={isActive ? 'nav-icon-active' : undefined} />
               <span>{item.text}</span>
             </div>
           );
@@ -60,7 +60,7 @@ export const MobileBottomNav = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <item.icon weight="regular" size={22} />
+              <item.icon size={22} />
               <span>{item.text}</span>
             </a>
           );
@@ -73,7 +73,7 @@ export const MobileBottomNav = () => {
             to={item.path}
             className={`mobile-nav-item ${isActive ? 'active' : ''}`}
           >
-            <item.icon weight={isActive ? 'fill' : 'regular'} size={22} />
+            <item.icon size={22} className={isActive ? 'nav-icon-active' : undefined} />
             <span>{item.text}</span>
           </Link>
         );
@@ -131,12 +131,11 @@ const NavModule = () => {
           if (item.hideInMenu) return null;
           const _IconText = () => (
             <>
-              <item.icon weight="fill" size={20} {...item.iconProps} />
+              <item.icon size={20} {...item.iconProps} />
               {item.text}
               {item.links && (
-                <CaretDown
+                <FaCaretDown
                   size={14}
-                  weight="bold"
                   className={`ml-1 ${rotatedItemKey === item.path ? 'rotate-icon' : ''}`}
                 />
               )}
@@ -156,7 +155,7 @@ const NavModule = () => {
                     className="flex items-center gap-2"
                     onClick={() => setShowMenu(!showMenu)}
                   >
-                    <link.icon weight="fill" size={20} />
+                    <link.icon size={20} />
                     {link.text}
                   </a>
                 ),
@@ -216,7 +215,7 @@ const NavModule = () => {
         {isMobile ? (
           <>
             <div className="custom-toggler mr-2" onClick={() => setShowMenu(!showMenu)}>
-              <List size={32} />
+              <FaBars size={32} />
             </div>
             {showMenu && (
               <Flex className="zt-nav zt-nav_expand" vertical>
@@ -239,7 +238,7 @@ const NavModule = () => {
                       <div className="user-dropdown-info">
                         <div className="user-dropdown-avatar">
                           <Avatar size={48}>
-                            <User weight="fill" size={24} />
+                            <FaUser size={24} />
                           </Avatar>
                           <div className={`user-level-badge ${vipInfo.class}`}>
                             {userInfo?.vipLevel === 0 ? '普通' : vipInfo.text}
@@ -258,7 +257,7 @@ const NavModule = () => {
                             会员有效期：{getVipExpireShow(userInfo)}
                           </div>
                           <div className="user-dropdown-balance">
-                            <Wallet weight="fill" size={16} color={THEME_COLOR} />
+                            <FaWallet size={16} color={THEME_COLOR} />
                             积分余额：
                             <span className="user-dropdown-balance-text">
                               {formatAmount(userInfo.points || 0)}
@@ -274,7 +273,7 @@ const NavModule = () => {
                           className="user-dropdown-logout-btn flex-1"
                           onClick={() => logout()}
                         >
-                          <SignOut size={18} weight="bold" />
+                          <FaSignOutAlt size={18} />
                           <span>退出登录</span>
                         </Button>
                       </Flex>

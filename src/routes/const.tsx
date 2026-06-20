@@ -1,24 +1,23 @@
 import { lazy } from 'react';
-import { type Icon, House, IconWeight } from '@phosphor-icons/react';
+import type { IconType } from 'react-icons';
+import { FaHome } from 'react-icons/fa';
 
 export interface RouteCfgType {
   path: string;
   text: string;
-  icon: Icon;
+  icon: IconType;
   element: React.FC | null;
   href?: string; // 外部链接
   active?: boolean;
   hideInMenu?: boolean;
-  iconProps?: {
-    weight?: IconWeight;
-  };
+  iconProps?: React.ComponentProps<IconType>;
   badgeProps?: {
     text: string;
     color?: string;
   };
   links?: {
     text: string;
-    icon: Icon;
+    icon: IconType;
     href: string;
   }[]; // 下拉菜单链接
 }
@@ -29,7 +28,7 @@ export const RoutesCfg: RouteCfgType[] = [
   {
     path: '/home',
     text: '首页',
-    icon: House,
+    icon: FaHome,
     badgeProps: {
       text: '新',
     },
