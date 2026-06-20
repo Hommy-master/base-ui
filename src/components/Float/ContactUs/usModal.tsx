@@ -1,8 +1,9 @@
-import { Flex, Modal, Space } from 'antd';
-import { FaLightbulb, FaPlay, FaRocket, FaWeixin } from 'react-icons/fa';
+import { Flex, Modal } from 'antd';
+import { FaHeadset, FaWeixin } from 'react-icons/fa';
 import QUserQcode_src from '~/assets/images/QUserQR.jpg';
+import { appConfig } from '~/utils/config';
 
-const UsModal = ({ open, onCancel }: any) => {
+const UsModal = ({ open, onCancel }: { open: boolean; onCancel: () => void }) => {
   return (
     <Modal
       className="contact-us-modal"
@@ -11,33 +12,30 @@ const UsModal = ({ open, onCancel }: any) => {
       onCancel={onCancel}
       zIndex={15000}
     >
-      <div className="contact-us-modal-title">简创AIGC技术服务</div>
+      <div className="contact-us-modal-title">{appConfig.title} 技术支持</div>
       <div className="contact-us-modal-subtitle">
-        <FaWeixin className="tip-icon" size={24} color="#15ba11" /> 微信扫码添加，问题解决快人一步！
+        <FaWeixin className="tip-icon" size={24} color="#15ba11" /> 微信扫码添加咨询
       </div>
-      <img className="contact-us-modal-image" src={QUserQcode_src} />
+      <img className="contact-us-modal-image" src={QUserQcode_src} alt="contact qrcode" />
       <div className="contact-us-modal-description">
-        <h3>为什么要添加我们微信？</h3>
+        <h3>联系我们</h3>
         <ul>
           <li>
-            <FaLightbulb />
-            探讨前沿AI技术与应用
+            <FaHeadset />
+            产品使用与技术支持
           </li>
           <li>
-            <FaPlay />
-            实时互动，专家答疑
-          </li>
-          <li>
-            <FaRocket />
-            快速掌握AI智能体
+            <FaWeixin />
+            微信扫码快速沟通
           </li>
         </ul>
         <Flex className="contact-us-modal-cta" align="center" justify="center" gap={4}>
           <FaWeixin className="tip-icon" size={24} color="#15ba11" />
-          立即扫码，开启AI新时代！
+          立即扫码联系我们
         </Flex>
       </div>
     </Modal>
   );
 };
+
 export default UsModal;

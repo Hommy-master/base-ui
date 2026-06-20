@@ -1,6 +1,5 @@
-import { message } from 'antd';
 import axios, { AxiosRequestConfig } from 'axios';
-import { AUTH_TOKEN_KEY } from '~/context/AuthContext ';
+import { AUTH_TOKEN_KEY } from '~/context/AuthContext';
 import { getLoginModalStore } from '~/components/LoginModal/store';
 
 export interface BaseResponse<T = any> {
@@ -58,14 +57,12 @@ axios.interceptors.request.use(
 export async function request<T>(url: string, options: AxiosRequestConfig = {}): Promise<T> {
   const { data } = await axios.request<T>({ url, ...options });
 
-  //@ts-ignore 处理错误状态码
-  const errorCode = data?.code || 0;
+  const errorCode = (data as BaseResponse)?.code || 0;
   switch (errorCode) {
     // 需要重新登录
     case 12010:
       redirectToLogin();
       break;
-
   }
   return data;
 }

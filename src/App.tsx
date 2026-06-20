@@ -1,15 +1,16 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Layout } from 'antd';
+import { useEffect, useMemo } from 'react';
 
 import Header from './components/Header';
-import { AuthProvider } from './context/AuthContext ';
+import { AuthProvider } from './context/AuthContext';
 import AppRoutes from './routes';
-import { useEffect, useMemo } from 'react';
 import { setGlobalNavigate } from './utils/navigation';
 import FloatCom from './components/Float';
 import LoginModal from './components/LoginModal';
-import { MobileBottomNav } from './components/Nav';
+import { MobileBottomNav, SideNav } from './components/Nav';
 import { useResponsive } from './hooks';
+import { appConfig, isLeftNavLayout } from '~/utils/config';
 
 const { Content } = Layout;
 
@@ -18,34 +19,57 @@ function App() {
   const navigate = useNavigate();
   const { isPhone } = useResponsive();
   const pathname = location.pathname;
-  const showHeader = pathname !== '/login';
-  const isExternalFeatures = pathname === '/external-features';
+  const showNav = useMemo(() => pathname !== '/login', [pathname]);
 
-  const _Content = () => {
-    return <Content className={`zt-app-main ${showHeader ? '' : 'zt-app-main_full'} ${isExternalFeatures ? 'zt-app-main_external' : ''} ${isPhone ? 'zt-app-main_mobile' : ''}`}>
+  const contentClassName = [
+    'zt-app-main',
+    showNav ? '' : 'zt-app-main_full',
+    isPhone ? 'zt-app-main_mobile' : '',
+    showNav && !isPhone && isLeftNavLayout ? 'zt-app-main_with-sider' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const content = (
+    <Content className={contentClassName}>
       <AppRoutes />
-      {!isExternalFeatures && <FloatCom />}
+      {appConfig.enableFloat && showNav && <FloatCom />}
       <LoginModal />
-    </Content>;
-  };
+    </Content>
+  );
 
-  const showNav = useMemo(() => {
-    return (showHeader && !isExternalFeatures);
-  }, [isExternalFeatures, showHeader]);
-
-  // 设置全局导航函数
   useEffect(() => {
     setGlobalNavigate(navigate);
-    // 清理函数
     return () => {
       setGlobalNavigate(null);
     };
   }, [navigate]);
+
+  const renderDesktopNav = () => {
+    if (isLeftNavLayout) {
+      return (
+        <Layout hasSider className="zt-app-body">
+          <SideNav />
+          <Layout>{content}</Layout>
+        </Layout>
+      );
+    }
+
+    return (
+      <>
+        <Header />
+        {content}
+      </>
+    );
+  };
+
   return (
     <AuthProvider>
-      <Layout className="zt-app">
-        {showNav && (isPhone ? <MobileBottomNav /> : <Header />)}
-        {_Content()}
+      <Layout
+        className={`zt-app ${isLeftNavLayout ? 'zt-app--left-nav' : 'zt-app--top-nav'} ${isPhone ? 'zt-app--mobile' : ''}`}
+      >
+        {showNav && (isPhone ? <MobileBottomNav /> : renderDesktopNav())}
+        {(!showNav || isPhone) && content}
       </Layout>
     </AuthProvider>
   );

@@ -1,25 +1,16 @@
-import useTitle from '~/hooks/useTitle';
 import { Flex, Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useSEO } from '~/hooks/useSEO';
+import { useAppSEO } from '~/hooks/useAppSEO';
 
-const pageTitle = '页面不存在，返回';
-const ErrorPage = () => {
+const NotFoundPage = () => {
   const navigate = useNavigate();
-  useTitle('404');
 
-  useSEO({
-    title: '404 页面未找到｜简创AIGC',
-    description: '抱歉，您访问的页面不存在。请检查网址是否正确，或返回首页继续浏览。',
-    keywords: '404, 页面未找到, 简创AIGC',
-    author: '逗赛科技',
+  useAppSEO({
+    title: '404 页面未找到',
+    path: '/404',
+    description: '抱歉，您访问的页面不存在。',
     robots: 'noindex, nofollow',
-    ogTitle: '404 页面未找到｜简创AIGC',
-    ogDescription: '抱歉，您访问的页面不存在。请检查网址是否正确，或返回首页继续浏览。',
-    ogUrl: 'https://jcaigc.cn/404',
     twitterCard: 'summary',
-    twitterTitle: '404 页面未找到｜简创AIGC',
-    twitterDescription: '抱歉，您访问的页面不存在。请检查网址是否正确，或返回首页继续浏览。',
   });
 
   return (
@@ -38,4 +29,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default NotFoundPage;

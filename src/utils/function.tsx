@@ -73,7 +73,7 @@ export function mergeDecimal(decimal: number[]) {
  * @param {string} value - 待校验数据
  * @returns {string} 返回对应大小的字符串
  */
-export function formatSize(size: number, unit = 0): String {
+export function formatSize(size: number, unit = 0): string {
   const DIGIT = 2; // 精确到小数点多少位
   const SCALE = 1024; // 文件大小进制
   const UNIT = ['B', 'KB', 'MB', 'GB', 'TB']; // 文件大小单位
@@ -124,7 +124,7 @@ export function formatAmount(value: number, options?: Partial<AmountOptions>) {
   const isNegative = num < 0;
   num = Math.abs(num);
   // 格式化为 fixed 位小数
-  let parts = num.toFixed(fixed).split('.');
+  const parts = num.toFixed(fixed).split('.');
   let integerPart = parts[0] || '';
   const decimalPart = parts[1]; // 添加千分位分隔符
   if (commas) {
@@ -166,11 +166,13 @@ export function createParticles() {
 }
 
 // 辅助函数：将十六进制颜色转换为RGB
-export const hexToRgb = (hex: any) => {
+export const hexToRgb = (hex: string) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  // @ts-ignore
-  const val = `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
-  return result ? val : '79, 172, 254'; // 默认颜色
+  if (!result) {
+    return '79, 172, 254';
+  }
+  const [, r, g, b] = result;
+  return `${parseInt(r ?? '0', 16)}, ${parseInt(g ?? '0', 16)}, ${parseInt(b ?? '0', 16)}`;
 };
 
 export const isSVIPCheck = (vipLevel: number) => {
@@ -189,19 +191,18 @@ export const getVipExpireShow = (userInfo: any) => {
   return vipLevel > 0 ? formatToDateTimeMin(vipExpireAt) : G_EmptyStr;
 };
 
-
 // 用于判断是否是移动设备
 export const isMobile = (): boolean => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
+};
 
 // 区分手机和平板
 export const isPhone = (): boolean => {
   const userAgent = navigator.userAgent;
-  
+
   // 排除 iPad 和一些大屏设备
   if (/iPad/i.test(userAgent)) return false;
-  
+
   // 判断是否是移动设备
   return /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-}
+};

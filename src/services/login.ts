@@ -6,14 +6,13 @@ interface UserCheckResult {
   exists: boolean; // 用户名是否存在
 }
 
-
 export enum UserRole {
   // 普通用户
   Normal = 'normal',
   // 智能体创作者，能添加智能体，赚取收入
-  Creater = 'creator', 
+  Creater = 'creator',
   // 管理员，能管理所有智能体，包括删除和编辑
-  Admin = 'admin'
+  Admin = 'admin',
 }
 
 export interface UserLoginResult {
@@ -61,12 +60,12 @@ export async function getPhoneCode(phone: string) {
 
 export async function fetchQRCode(): Promise<BaseResponse<QRcodeResult>> {
   return await request(`/openapi/v1/user/auth/qrcode?sceneID=80001`, {
-    method: 'get'
+    method: 'get',
   });
 }
 
 export async function fetchQRCodeLogin(ticket: string): Promise<BaseResponse<UserLoginResult>> {
   return await request(`/openapi/v1/user/auth/qrcode/status?ticket=${ticket}&sceneID=80001`, {
-    method: 'get'
+    method: 'get',
   });
 }

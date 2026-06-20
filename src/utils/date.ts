@@ -2,19 +2,16 @@
  * 时间格式化工具函数
  */
 
-import type { ConfigType } from "dayjs";
-import dayjs from "dayjs";
-import { G_EmptyStr } from "./const";
+import type { ConfigType } from 'dayjs';
+import dayjs from 'dayjs';
+import { G_EmptyStr } from './const';
 
-export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
-export const DATE_TIME_MIN_FORMAT = "YYYY-MM-DD HH:mm";
-const DATE_FORMAT = "YYYY-MM-DD";
-const TIME_FORMAT = "HH:mm:ss";
+export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const DATE_TIME_MIN_FORMAT = 'YYYY-MM-DD HH:mm';
+const DATE_FORMAT = 'YYYY-MM-DD';
+const TIME_FORMAT = 'HH:mm:ss';
 
-export function formatToDateTime(
-  date: ConfigType = null,
-  format = DATE_TIME_FORMAT
-): string {
+export function formatToDateTime(date: ConfigType = null, format = DATE_TIME_FORMAT): string {
   return date ? dayjs(date).format(format) : G_EmptyStr;
 }
 
@@ -25,17 +22,11 @@ export function formatToDateTimeMin(
   return formatToDateTime(date, format);
 }
 
-export function formatToDate(
-  date: ConfigType = null,
-  format = DATE_FORMAT
-): string {
+export function formatToDate(date: ConfigType = null, format = DATE_FORMAT): string {
   return date ? dayjs(date).format(format) : G_EmptyStr;
 }
 
-export function formatToTime(
-  date: ConfigType = null,
-  format = TIME_FORMAT
-): string {
+export function formatToTime(date: ConfigType = null, format = TIME_FORMAT): string {
   return date ? dayjs(date).format(format) : G_EmptyStr;
 }
 

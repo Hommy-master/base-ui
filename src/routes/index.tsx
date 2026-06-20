@@ -1,13 +1,17 @@
 import { Suspense, useEffect } from 'react';
-
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Spin } from 'antd';
 import { setupAxiosInterceptors } from '~/requestError';
-import { ProtectedRoute } from '~/context/AuthContext ';
+import { ProtectedRoute } from '~/context/AuthContext';
 import GtmRouterTracker from './gtmRouterTracker';
+import NotFound from '~/pages/404';
+import { LoginRoute, HomePage, RoutesCfg } from './const';
 
-import Home from '~/pages/Home';
-
-import { LoginRoute, RoutesCfg } from './const';
+const PageFallback = () => (
+  <div className="flex size-full items-center justify-center">
+    <Spin size="large" />
+  </div>
+);
 
 const AppRoutes = () => {
   const navigate = useNavigate();
@@ -15,28 +19,25 @@ const AppRoutes = () => {
   useEffect(() => {
     const teardown = setupAxiosInterceptors(navigate);
     return teardown;
-  }, []);
+  }, [navigate]);
+
   return (
-    // 路由组件使用lazy加载时，必须配合Suspense使用，否则切换路由页面时会报错
-    // 参考：https://reactrouter.com/en/main/route/route#suspense
-    <Suspense>
-      <Routes>
-        {/* 公开路由 */}
-        <Route path="/login" element={<LoginRoute />} />
-
-        <Route path="*" element={<Navigate replace to="/" />} />
-        <Route path="/*" element={<GtmRouterTracker />} />
-        <Route path="/" element={<Home />} />
-
-        {/* 需要登录的受保护路由 */}
-        <Route element={<ProtectedRoute />}>
-          {RoutesCfg.map((route) => {
-            if (!route.element) return null; // 如果没有组件则不渲染路由
-            return <Route key={route.path} path={route.path} element={<route.element />} />;
-          })}
-        </Route>
-      </Routes>
-    </Suspense>
+    <>
+      <GtmRouterTracker />
+      <Suspense fallback={<PageFallback />}>
+        <Routes>
+          <Route path="/login" element={<LoginRoute />} />
+          <Route path="/" element={<HomePage />} />
+          <Route element={<ProtectedRoute />}>
+            {RoutesCfg.map((route) => {
+              if (!route.element || route.path === '/') return null;
+              return <Route key={route.path} path={route.path} element={<route.element />} />;
+            })}
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </>
   );
 };
 

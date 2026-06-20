@@ -4,7 +4,7 @@ import { ThemeConfig } from 'antd';
  * Theme configuration for Ant Design components.
  * https://ant.design/docs/react/customize-theme
  * 这里只能配置token和components，不能配置css变量样式
- * 配置css变量样式需要在global.less中进行配置
+ * 配置css变量样式需要在 global.css 中进行配置
  * 如：
  * .ant-tooltip {
  *   --antd-arrow-background-color:#f00;
@@ -14,7 +14,7 @@ export const theme = {
   token: {
     colorPrimary: '#356bfd',
     fontSize: 16,
-    colorBorder: '#e2e8f0'
+    colorBorder: '#e2e8f0',
   },
   components: {
     Tabs: {
@@ -29,8 +29,8 @@ export const theme = {
       fontSizeLG: 16,
     },
     Tooltip: {
-      colorBgSpotlight: "#fff",
-      colorTextLightSolid: "rgba(0, 0, 0, 0.85)",
+      colorBgSpotlight: '#fff',
+      colorTextLightSolid: 'rgba(0, 0, 0, 0.85)',
     },
     Modal: {
       borderRadius: 2,

@@ -1,0 +1,18 @@
+export type NavLayout = 'top' | 'left';
+
+const env = import.meta.env;
+
+export const appConfig = {
+  title: env.VITE_APP_TITLE || 'Base UI',
+  description: env.VITE_APP_DESCRIPTION || '基于 React + Vite + Ant Design 的前端项目模板',
+  siteUrl: env.VITE_SITE_URL || 'http://localhost:8008',
+  companyName: env.VITE_COMPANY_NAME || env.VITE_APP_TITLE || 'Base UI',
+  gtmId: env.VITE_GTM_ID || '',
+  apiProxyTarget: env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:3000',
+  navLayout: (env.VITE_NAV_LAYOUT as NavLayout) || 'top',
+  enableFloat: env.VITE_ENABLE_FLOAT !== 'false',
+  enableGtm: env.VITE_ENABLE_GTM !== 'false' && !!env.VITE_GTM_ID,
+} as const;
+
+export const isLeftNavLayout = appConfig.navLayout === 'left';
+export const isTopNavLayout = appConfig.navLayout === 'top';

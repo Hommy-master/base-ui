@@ -2,7 +2,7 @@ export enum GtmEvents {
   PAGE_VIEW = 'page_view',
   BUTTON_CLICK = 'button_click',
   FORM_SUBMIT = 'form_submit',
-  USER_SIGNUP = 'user_signup'
+  USER_SIGNUP = 'user_signup',
 }
 
 export type GtmEventParams = {

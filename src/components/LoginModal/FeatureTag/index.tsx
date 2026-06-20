@@ -18,12 +18,9 @@ interface FeatureTagProps {
 }
 
 const FeatureTag: React.FC<FeatureTagProps> = ({ icon, name, color, animation }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
-
     // 创建粒子效果
     const newParticles = [];
     for (let i = 0; i < 8; i++) {
@@ -39,7 +36,6 @@ const FeatureTag: React.FC<FeatureTagProps> = ({ icon, name, color, animation })
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     setTimeout(() => setParticles([]), 500);
   };
 

@@ -1,4 +1,4 @@
-import type { NavigateFunction } from "react-router-dom";
+import type { NavigateFunction } from 'react-router-dom';
 
 // 全局导航解决方案
 let globalNavigate: NavigateFunction | null = null;

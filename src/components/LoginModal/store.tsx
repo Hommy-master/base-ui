@@ -1,7 +1,7 @@
 import { proxy, useSnapshot } from 'valtio';
 
 const store = proxy({
-	open: false
+  open: false,
 });
 
 export const useLoginModalStore = () => useSnapshot(store);

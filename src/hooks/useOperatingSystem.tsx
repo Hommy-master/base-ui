@@ -8,7 +8,7 @@ interface OperatingSystemInfo {
 export const useOperatingSystem = (): OperatingSystemInfo => {
   const [osInfo, setOsInfo] = useState<OperatingSystemInfo>({
     os: 'other',
-    isMacArm: false
+    isMacArm: false,
   });
 
   useEffect(() => {

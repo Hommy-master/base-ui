@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LOGIN_CHANGE_EVENT } from '~/context/AuthContext ';
+import { LOGIN_CHANGE_EVENT } from '~/context/AuthContext';
 
 export function useLoginChange() {
   const [trigger, setTrigger] = useState(0);

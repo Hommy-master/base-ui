@@ -1,7 +1,7 @@
 import { UserLoginResult } from './login';
 import { BaseResponse, request } from './request';
 
-export async function getUserInfo(id: string): Promise<BaseResponse<UserLoginResult>>  {
+export async function getUserInfo(id: string): Promise<BaseResponse<UserLoginResult>> {
   return await request(`/openapi/v1/user`, {
     method: 'get',
     params: { id },

@@ -1,13 +1,12 @@
 import { FaQrcode, FaSync } from 'react-icons/fa';
 import { Button, Flex, Spin } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '~/context/AuthContext ';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAuth } from '~/context/AuthContext';
 import { fetchQRCode, fetchQRCodeLogin } from '~/services/login';
 import { trackEvent } from '~/utils/gtm';
 import { useLoginModalStore } from './store';
 
 const GET_QRCODE_TIME = 300 * 1000;
-
 const CHECK_TIME = 2 * 1000;
 
 const QrcodeLogin = () => {
@@ -16,9 +15,7 @@ const QrcodeLogin = () => {
   const [ticket, setTicket] = useState<string>('');
   const [expireStr, setExpireStr] = useState<string>('');
 
-  // 定义定时获取扫描结果的定时器
   const checkTimerRef = useRef<number | NodeJS.Timeout | null>(null);
-
   const expireTimerRef = useRef<number | NodeJS.Timeout | null>(null);
 
   const deleteCheckTimer = () => {
@@ -28,7 +25,7 @@ const QrcodeLogin = () => {
     }
   };
 
-  const getQrcode = async () => {
+  const getQrcode = useCallback(async () => {
     setTicket('');
     setExpireStr('');
     const { code, data } = await fetchQRCode();
@@ -42,12 +39,10 @@ const QrcodeLogin = () => {
     } else {
       setExpireStr('获取二维码失败');
     }
-  };
+  }, []);
 
-  const checkLogin = async () => {
-    // 清除之前的定时器
+  const checkLogin = useCallback(async () => {
     deleteCheckTimer();
-    // 如果没有ticket或者二维码已过期，则不再检查登录状态
     if (!ticket || expireStr) {
       return;
     }
@@ -59,13 +54,15 @@ const QrcodeLogin = () => {
       });
       updateAuthInfo(data);
     } else {
-      checkTimerRef.current = setTimeout(checkLogin, CHECK_TIME);
+      checkTimerRef.current = setTimeout(() => {
+        void checkLogin();
+      }, CHECK_TIME);
     }
-  };
+  }, [ticket, expireStr, updateAuthInfo]);
 
   useEffect(() => {
     if (open) {
-      getQrcode();
+      void getQrcode();
     } else {
       setTicket('');
       deleteCheckTimer();
@@ -74,11 +71,12 @@ const QrcodeLogin = () => {
         expireTimerRef.current = null;
       }
     }
-  }, [open]);
+  }, [open, getQrcode]);
 
   useEffect(() => {
-    checkLogin();
-  }, [ticket]);
+    void checkLogin();
+  }, [checkLogin]);
+
   return (
     <Flex vertical align="center" className="flex-1 qrcode-login">
       <Flex className="qrcode-ct" align="center" justify="center">
@@ -101,7 +99,7 @@ const QrcodeLogin = () => {
               justify="center"
             >
               {expireStr}
-              <Button type="link" onClick={getQrcode} icon={<FaSync size={24} />} />
+              <Button type="link" onClick={() => void getQrcode()} icon={<FaSync size={24} />} />
             </Flex>
           </span>
         )}

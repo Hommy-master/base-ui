@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-interface SEOProps {
+export interface SEOProps {
   title?: string;
   description?: string;
   keywords?: string;
@@ -50,15 +50,13 @@ export const useSEO = ({
     const head = document.head;
 
     // Update or create meta tags
-    metaTags.forEach(tag => {
+    metaTags.forEach((tag) => {
       if (!tag.content) return;
 
-      const selector = tag.name 
-        ? `meta[name="${tag.name}"]` 
-        : `meta[property="${tag.property}"]`;
-      
+      const selector = tag.name ? `meta[name="${tag.name}"]` : `meta[property="${tag.property}"]`;
+
       let element = document.querySelector(selector) as HTMLMetaElement;
-      
+
       if (!element) {
         element = document.createElement('meta');
         if (tag.name) {
@@ -68,7 +66,7 @@ export const useSEO = ({
         }
         head.appendChild(element);
       }
-      
+
       element.setAttribute('content', tag.content);
     });
 

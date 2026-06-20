@@ -33,11 +33,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 80% 20%, rgba(66, 165, 245, 0.08) 0%, transparent 40%),
+  background:
+    radial-gradient(circle at 80% 20%, rgba(66, 165, 245, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 20% 70%, rgba(41, 121, 255, 0.1) 0%, transparent 40%);
   animation: pulse 15s infinite alternate;
 }
-
 
 /* 动画关键帧 */
 @keyframes wave {

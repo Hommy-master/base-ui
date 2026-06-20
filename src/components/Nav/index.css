@@ -1,4 +1,7 @@
 .zt-nav {
+  display: flex;
+  align-items: center;
+
   &.zt-nav_expand {
     width: 100%;
     top: 55px;
@@ -11,12 +14,31 @@
     border-bottom-left-radius: 8px;
   }
 
+  &.zt-nav_vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+
+    .nav-item {
+      width: 100%;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
   &-ct {
     padding-right: 8px;
 
     .login-btn {
       &:hover {
         animation: float-small 1s ease-in-out forwards;
+      }
+
+      &_compact {
+        margin-top: 8px;
       }
     }
 
@@ -36,10 +58,13 @@
       &:hover {
         animation: pulse 0.5s ease-in-out forwards;
       }
+
+      &_compact {
+        margin: 8px auto 0;
+      }
     }
   }
 
-  /* 自定义图标旋转动画类 */
   .rotate-icon {
     animation: rotateIcon 0.4s ease-in-out forwards;
   }
@@ -93,6 +118,124 @@
       width: 70%;
     }
   }
+}
+
+.zt-nav.zt-nav_vertical .nav-item::after {
+  display: none;
+}
+
+.zt-sider {
+  background: var(--sidebar-background) !important;
+  box-shadow: var(--sidebar-shadow);
+  position: fixed !important;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100vh !important;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.zt-sider .ant-layout-sider-children {
+  height: 100%;
+}
+
+.zt-sider-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.zt-sider-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  text-decoration: none;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.zt-sider-logo {
+  height: 32px;
+  width: auto;
+}
+
+.zt-sider-brand-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--primary-color);
+}
+
+.zt-sider-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+
+.zt-sider-footer {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.zt-sider-user-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-color-bg);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.zt-sider-user-panel:hover {
+  background: rgba(var(--primary-color-rgb), 0.12);
+}
+
+.zt-sider-user-avatar {
+  flex-shrink: 0;
+  background: var(--gradient-secondary);
+  color: #fff;
+}
+
+.zt-sider-user-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.zt-sider-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.zt-sider-user-id {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-gray);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.zt-sider-user-id-copy {
+  font-size: 12px;
 }
 
 .nav-dropdown-menu {
@@ -218,7 +361,6 @@
   }
 }
 
-/* 移动端底部导航样式 */
 .mobile-bottom-nav {
   position: fixed;
   height: var(--header-height);

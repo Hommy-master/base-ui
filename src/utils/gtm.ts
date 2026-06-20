@@ -10,8 +10,8 @@ export const initGTM = (gtmId: string) => {
     gtmId,
     dataLayer: {
       platform: 'web',
-      reactVersion: React.version
-    }
+      reactVersion: React.version,
+    },
   });
 };
 
@@ -24,7 +24,7 @@ export const trackEvent = (eventName: string, params: Record<string, any> = {}) 
 
   window.dataLayer.push({
     event: eventName,
-    ...params
+    ...params,
   });
 };
 
