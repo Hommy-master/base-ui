@@ -1,0 +1,121 @@
+import { ArrowsClockwise, QrCode } from '@phosphor-icons/react';
+import { Button, Flex, message, Spin } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { useAuth } from '~/context/AuthContext ';
+import { fetchQRCode, fetchQRCodeLogin } from '~/services/login';
+import { trackEvent } from '~/utils/gtm';
+import { useLoginModalStore } from './store';
+
+const GET_QRCODE_TIME = 300 * 1000;
+
+const CHECK_TIME = 2 * 1000;
+
+const QrcodeLogin = () => {
+  const { open } = useLoginModalStore();
+  const { updateAuthInfo } = useAuth();
+  const [ticket, setTicket] = useState<string>('');
+  const [expireStr, setExpireStr] = useState<string>('');
+
+  // 定义定时获取扫描结果的定时器
+  const checkTimerRef = useRef<number | NodeJS.Timeout | null>(null);
+
+  const expireTimerRef = useRef<number | NodeJS.Timeout | null>(null);
+
+  const deleteCheckTimer = () => {
+    if (checkTimerRef.current !== null) {
+      clearTimeout(checkTimerRef.current);
+      checkTimerRef.current = null;
+    }
+  };
+
+  const getQrcode = async () => {
+    setTicket('');
+    setExpireStr('');
+    const { code, data } = await fetchQRCode();
+    if (code === 0) {
+      setTicket(data.ticket);
+      expireTimerRef.current = setTimeout(() => {
+        deleteCheckTimer();
+        setTicket('');
+        setExpireStr('二维码超时');
+      }, GET_QRCODE_TIME);
+    } else {
+      setExpireStr('获取二维码失败');
+    }
+  };
+
+  const checkLogin = async () => {
+    // 清除之前的定时器
+    deleteCheckTimer();
+    // 如果没有ticket或者二维码已过期，则不再检查登录状态
+    if (!ticket || expireStr) {
+      return;
+    }
+    const { code, data } = await fetchQRCodeLogin(ticket);
+    if (code === 0) {
+      trackEvent('qrcodeLogin', {
+        userId: data.id || '*',
+        ticket,
+      });
+      updateAuthInfo(data);
+    } else {
+      checkTimerRef.current = setTimeout(checkLogin, CHECK_TIME);
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      getQrcode();
+    } else {
+      setTicket('');
+      deleteCheckTimer();
+      if (expireTimerRef.current) {
+        clearTimeout(expireTimerRef.current);
+        expireTimerRef.current = null;
+      }
+    }
+  }, [open]);
+
+  useEffect(() => {
+    checkLogin();
+  }, [ticket]);
+  return (
+    <Flex vertical align="center" className="flex-1 qrcode-login">
+      <Flex className="qrcode-ct" align="center" justify="center">
+        {ticket ? (
+          <img
+            src={`https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${encodeURIComponent(ticket)}`}
+            alt="Account"
+            className="qrcode-login-icon"
+          />
+        ) : (
+          !expireStr && <Spin size="large" />
+        )}
+        {expireStr && (
+          <span className="qrcode-refresh size-full">
+            <Flex
+              className="qrcode-refresh-inner size-full"
+              gap={6}
+              vertical
+              align="center"
+              justify="center"
+            >
+              {expireStr}
+              <Button
+                type="link"
+                onClick={getQrcode}
+                icon={<ArrowsClockwise size={24} weight="bold" />}
+              />
+            </Flex>
+          </span>
+        )}
+      </Flex>
+      <span className="qrcode-login-text mt-4">
+        <QrCode className="svg-inline--fa fa-qrcode qrcode-tip-icon" weight="bold" />
+        请使用微信扫描二维码登录
+      </span>
+    </Flex>
+  );
+};
+
+export default QrcodeLogin;
