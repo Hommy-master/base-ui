@@ -33,35 +33,36 @@ export interface QRcodeLoginResult {
 }
 
 export async function checkUserName(phone: string): Promise<BaseResponse<UserCheckResult>> {
-  return await request(`/openapi/v1/user/check`, {
+  return await request('/v1/user/check', {
     method: 'get',
     params: { phone },
   });
 }
 
 export async function pwdlogin(params: UserLoginParams): Promise<BaseResponse<UserLoginResult>> {
-  return await request(`/openapi/v1/user/auth/login`, {
+  return await request('/v1/user/auth/login', {
     method: 'post',
     data: params,
   });
 }
 
 export async function getPhoneCode(phone: string) {
-  return await request(`/openapi/v1/user/auth/sms`, {
+  return await request('/v1/user/auth/sms', {
     method: 'post',
     data: { phone },
   });
 }
 
 export async function fetchQRCode(): Promise<BaseResponse<QRcodeResult>> {
-  return await request(`/openapi/v1/user/auth/qrcode?sceneID=${appConfig.authSceneId}`, {
+  return await request('/v1/user/auth/qrcode', {
     method: 'get',
+    params: { sceneID: appConfig.authSceneId },
   });
 }
 
 export async function fetchQRCodeLogin(ticket: string): Promise<BaseResponse<UserLoginResult>> {
-  return await request(
-    `/openapi/v1/user/auth/qrcode/status?ticket=${ticket}&sceneID=${appConfig.authSceneId}`,
-    { method: 'get' }
-  );
+  return await request('/v1/user/auth/qrcode/status', {
+    method: 'get',
+    params: { ticket, sceneID: appConfig.authSceneId },
+  });
 }

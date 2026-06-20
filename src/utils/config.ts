@@ -13,6 +13,7 @@ export const appConfig = {
   enableFloat: env.VITE_ENABLE_FLOAT !== 'false',
   enableGtm: env.VITE_ENABLE_GTM !== 'false' && !!env.VITE_GTM_ID,
   authSceneId: env.VITE_AUTH_SCENE_ID || 'default',
+  apiPrefix: env.VITE_API_PREFIX || '/openapi',
   contactQrcodeUrl: env.VITE_CONTACT_QRCODE_URL || '',
   supportTitle: env.VITE_SUPPORT_TITLE || `${env.VITE_APP_TITLE || 'Base UI'} 技术支持`,
 } as const;

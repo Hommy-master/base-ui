@@ -2,7 +2,7 @@ import { UserLoginResult } from './login';
 import { BaseResponse, request } from './http';
 
 export async function getUserInfo(id: string): Promise<BaseResponse<UserLoginResult>> {
-  return await request(`/openapi/v1/user`, {
+  return await request('/v1/user', {
     method: 'get',
     params: { id },
   });
@@ -11,17 +11,17 @@ export async function getUserInfo(id: string): Promise<BaseResponse<UserLoginRes
 export async function updateUserName(
   userInfo: Pick<UserLoginResult, 'id' | 'name'>
 ): Promise<BaseResponse<UserLoginResult>> {
-  return await request(`/openapi/v1/user`, {
+  return await request('/v1/user', {
     method: 'post',
     data: { ...userInfo },
   });
 }
 
-/** 获取插件API秘钥 */
+/** 获取插件 API 秘钥 */
 export async function updateApiToken(
   userInfo: Pick<UserLoginResult, 'id' | 'apiKey'>
 ): Promise<BaseResponse<UserLoginResult>> {
-  return await request(`/openapi/v1/user`, {
+  return await request('/v1/user', {
     method: 'post',
     data: { ...userInfo },
   });
@@ -31,7 +31,7 @@ export async function updateApiToken(
 export async function exchangeCode(
   userInfo: Pick<UserLoginResult, 'id'> & { activation_code: string }
 ): Promise<BaseResponse<UserLoginResult>> {
-  return await request(`/openapi/v1/user/update/exchange_code`, {
+  return await request('/v1/user/update/exchange_code', {
     method: 'post',
     data: { ...userInfo },
   });

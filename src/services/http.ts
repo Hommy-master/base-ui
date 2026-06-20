@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import type { NavigateFunction } from 'react-router-dom';
 import { AUTH_TOKEN_KEY } from '~/context/AuthContext';
 import { navigateTo } from '~/utils/navigation';
+import { apiPath } from '~/utils/api';
 
 export interface BaseResponse<T = unknown> {
   code: number;
@@ -109,7 +110,7 @@ export function setupHttpInterceptors(navigate: NavigateFunction) {
 }
 
 export async function request<T>(url: string, options: AxiosRequestConfig = {}): Promise<T> {
-  const { data } = await axios.request<T>({ url, ...options });
+  const { data } = await axios.request<T>({ url: apiPath(url), ...options });
 
   const errorCode = (data as BaseResponse)?.code || 0;
   if (errorCode === SESSION_EXPIRED_CODE) {

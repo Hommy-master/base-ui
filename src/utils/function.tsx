@@ -1,4 +1,4 @@
-import { capitalize, map as lodashMap, sum as lodashSum, words, isNumber } from 'lodash';
+import { capitalize, map as lodashMap, sum as lodashSum, words, isNumber } from 'lodash-es';
 
 export function getFullName(
   filePathName: string | null,

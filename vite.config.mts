@@ -9,12 +9,15 @@ import { viteMockServe } from 'vite-plugin-mock';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const apiPrefix = env.VITE_API_PREFIX || '/openapi';
+  const useMock = env.VITE_MOCK === 'true' || process.env.VITE_MOCK === 'true';
+
   return {
     clearScreen: false,
     server: {
       port: 8008,
       proxy: {
-        '/openapi': {
+        [apiPrefix]: {
           target: env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:3000',
           changeOrigin: true,
         },
@@ -31,7 +34,8 @@ export default defineConfig(({ mode }) => {
     plugins: [
       viteMockServe({
         mockPath: 'mock',
-        enable: process.env.NODE_ENV === 'development' && !!process.env.VITE_MOCK,
+        enable: mode === 'development' && useMock,
+        watchFiles: true,
       }),
       tsconfigPaths(),
       react(),

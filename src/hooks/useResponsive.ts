@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { ScreenBreakpoint } from '~/utils/const';
 
 export const useResponsive = (breakpoint = ScreenBreakpoint) => {

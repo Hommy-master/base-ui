@@ -1,6 +1,5 @@
 import { Avatar, Button, Divider, Dropdown, Flex, Typography } from 'antd';
 import { FaSignOutAlt, FaUser } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '~/context/AuthContext';
 import type { UserLoginResult } from '~/services/login';
 import { getLoginModalStore } from '~/components/LoginModal/store';
@@ -53,7 +52,6 @@ const userDropdownMenu = (userInfo: Partial<UserLoginResult>, logout: () => void
 });
 
 const UserActions = ({ compact }: UserActionsProps) => {
-  const navigate = useNavigate();
   const { userInfo = {}, logout } = useAuth();
 
   if (userInfo?.id) {
