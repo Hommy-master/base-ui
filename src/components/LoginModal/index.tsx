@@ -3,7 +3,8 @@ import { FaBolt, FaShieldAlt, FaRocket } from 'react-icons/fa';
 import FeatureTag from './FeatureTag';
 import Logo_src from '~/assets/images/logo.png';
 import QrcodeLogin from './qrcode';
-import { getLoginModalStore, useLoginModalStore } from './store';
+import { closeLogin } from '~/utils/loginFlow';
+import { useLoginModalStore } from './store';
 import { appConfig } from '~/utils/config';
 
 import './index.css';
@@ -19,9 +20,7 @@ const LoginModal = () => {
       open={open}
       centered
       maskClosable={false}
-      onCancel={() => {
-        getLoginModalStore().open = false;
-      }}
+      onCancel={() => closeLogin()}
       footer={null}
     >
       <div className="login-brand">

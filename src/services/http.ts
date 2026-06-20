@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import type { NavigateFunction } from 'react-router-dom';
 import { AUTH_TOKEN_KEY } from '~/context/AuthContext';
 import { clearAuthSession } from '~/services/authSession';
+import { openLogin } from '~/utils/loginFlow';
+import { isLoginPageMode } from '~/utils/config';
 import { handleBusinessResponse } from '~/services/responseHandlers';
 import type { BaseResponse } from '~/services/types';
 import { apiPath } from '~/utils/api';
@@ -49,13 +51,15 @@ export function setupHttpInterceptors(navigate: NavigateFunction) {
 
       if (error.response) {
         if (error.response.status === 401) {
-          const { pathname } = window.location;
-          if (pathname !== '/login') {
-            clearAuthSession();
+          const { pathname, search, hash } = window.location;
+          clearAuthSession();
+          if (isLoginPageMode && pathname !== '/login') {
             navigate('/login', {
               replace: true,
               state: { from: { pathname } },
             });
+          } else {
+            openLogin({ pathname, search, hash });
           }
           return;
         }

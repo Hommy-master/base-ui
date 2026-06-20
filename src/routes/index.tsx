@@ -1,8 +1,9 @@
 import { Suspense, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Navigate, Routes, Route, useNavigate } from 'react-router-dom';
 import { Spin } from 'antd';
 import { setupHttpInterceptors } from '~/services/http';
 import { ProtectedRoute } from '~/context/AuthContext';
+import { isLoginPageMode } from '~/utils/config';
 import { AuthLayout, MainLayout } from '~/layouts';
 import GtmRouterTracker from './gtmRouterTracker';
 import NotFound from '~/pages/404';
@@ -27,9 +28,13 @@ const AppRoutes = () => {
       <GtmRouterTracker />
       <Suspense fallback={<PageFallback />}>
         <Routes>
-          <Route element={<AuthLayout />}>
-            <Route path="/login" element={<LoginRoute />} />
-          </Route>
+          {isLoginPageMode ? (
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<LoginRoute />} />
+            </Route>
+          ) : (
+            <Route path="/login" element={<Navigate to="/" replace />} />
+          )}
 
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />

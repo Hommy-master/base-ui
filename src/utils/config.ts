@@ -1,6 +1,9 @@
 export type NavLayout = 'top' | 'left';
+export type LoginMode = 'page' | 'modal';
 
 const env = import.meta.env;
+
+const loginMode = (env.VITE_LOGIN_MODE as LoginMode) || 'modal';
 
 export const appConfig = {
   title: env.VITE_APP_TITLE || 'Base UI',
@@ -16,7 +19,10 @@ export const appConfig = {
   apiPrefix: env.VITE_API_PREFIX || '/openapi',
   contactQrcodeUrl: env.VITE_CONTACT_QRCODE_URL || '',
   supportTitle: env.VITE_SUPPORT_TITLE || `${env.VITE_APP_TITLE || 'Base UI'} 技术支持`,
+  loginMode,
 } as const;
 
+export const isLoginPageMode = loginMode === 'page';
+export const isLoginModalMode = loginMode === 'modal';
 export const isLeftNavLayout = appConfig.navLayout === 'left';
 export const isTopNavLayout = appConfig.navLayout === 'top';

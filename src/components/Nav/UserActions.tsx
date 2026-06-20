@@ -2,7 +2,7 @@ import { Avatar, Button, Divider, Dropdown, Flex, Typography } from 'antd';
 import { FaSignOutAlt, FaUser } from 'react-icons/fa';
 import { useAuth } from '~/context/AuthContext';
 import type { UserLoginResult } from '~/services/login';
-import { getLoginModalStore } from '~/components/LoginModal/store';
+import { openLogin } from '~/utils/loginFlow';
 
 type UserActionsProps = {
   compact?: boolean;
@@ -92,7 +92,7 @@ const UserActions = ({ compact }: UserActionsProps) => {
       type="primary"
       className={`login-btn ${compact ? 'login-btn_compact' : ''}`}
       block={compact}
-      onClick={() => (getLoginModalStore().open = true)}
+      onClick={() => openLogin()}
     >
       登录
     </Button>

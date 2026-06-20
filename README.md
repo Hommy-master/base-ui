@@ -34,19 +34,20 @@ cp .env.minimal.example .env
 
 复制 `.env.example` 为 `.env` 后修改：
 
-| 变量                      | 说明                    | 默认值                |
-| ------------------------- | ----------------------- | --------------------- |
-| `VITE_APP_TITLE`          | 应用名称                | Base UI               |
-| `VITE_APP_DESCRIPTION`    | 应用描述                | -                     |
-| `VITE_SITE_URL`           | 站点 URL                | http://localhost:8008 |
-| `VITE_NAV_LAYOUT`         | 导航布局 `top` / `left` | top                   |
-| `VITE_API_PREFIX`         | API 路径前缀            | `/openapi`            |
-| `VITE_API_PROXY_TARGET`   | 开发代理目标            | http://127.0.0.1:3000 |
-| `VITE_GTM_ID`             | Google Tag Manager ID   | 空（不启用）          |
-| `VITE_ENABLE_FLOAT`       | 是否显示悬浮客服        | true                  |
-| `VITE_AUTH_SCENE_ID`      | 扫码登录场景 ID         | default               |
-| `VITE_CONTACT_QRCODE_URL` | 客服二维码图片 URL      | 空（不显示二维码）    |
-| `VITE_SUPPORT_TITLE`      | 客服悬浮窗标题          | `{应用名} 技术支持`   |
+| 变量                      | 说明                      | 默认值                |
+| ------------------------- | ------------------------- | --------------------- |
+| `VITE_APP_TITLE`          | 应用名称                  | Base UI               |
+| `VITE_APP_DESCRIPTION`    | 应用描述                  | -                     |
+| `VITE_SITE_URL`           | 站点 URL                  | http://localhost:8008 |
+| `VITE_NAV_LAYOUT`         | 导航布局 `top` / `left`   | top                   |
+| `VITE_API_PREFIX`         | API 路径前缀              | `/openapi`            |
+| `VITE_API_PROXY_TARGET`   | 开发代理目标              | http://127.0.0.1:3000 |
+| `VITE_GTM_ID`             | Google Tag Manager ID     | 空（不启用）          |
+| `VITE_ENABLE_FLOAT`       | 是否显示悬浮客服          | true                  |
+| `VITE_AUTH_SCENE_ID`      | 扫码登录场景 ID           | default               |
+| `VITE_LOGIN_MODE`         | 登录方式 `page` / `modal` | page                  |
+| `VITE_CONTACT_QRCODE_URL` | 客服二维码图片 URL        | 空（不显示二维码）    |
+| `VITE_SUPPORT_TITLE`      | 客服悬浮窗标题            | `{应用名} 技术支持`   |
 
 ## 自定义 API 前缀
 
@@ -77,9 +78,25 @@ return await request('/v1/user', { method: 'get', params: { id } });
 
 Mock 仅在开发环境生效，生产构建不会打包 mock 代码。
 
+## 登录方式
+
+通过 `VITE_LOGIN_MODE` 切换，所有入口（导航栏、受保护路由、401、会话过期、退出登录）统一走 `openLogin()`：
+
+| 模式       | 值             | 行为                                            |
+| ---------- | -------------- | ----------------------------------------------- |
+| 独立登录页 | `page`（默认） | 跳转 `/login`，带 `LoginMask` 背景              |
+| 弹窗登录   | `modal`        | 在 `MainLayout` 挂载 `LoginModal`，不离开当前壳 |
+
+```bash
+# 使用弹窗登录
+VITE_LOGIN_MODE=modal
+```
+
+`modal` 模式下访问 `/login` 会自动重定向到首页并打开弹窗；登录成功后跳回 `returnTo` 记录的来源路径。
+
 ## 登录流程
 
-未登录访问受保护路由、会话过期（401 / 业务码 12010）、退出登录，均统一跳转 `/login` 页面。
+未登录访问受保护路由、会话过期（401 / 业务码 12010）、退出登录，均通过 `src/utils/loginFlow.ts` 按上述模式处理。
 
 ## 最小化配置
 

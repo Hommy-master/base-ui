@@ -1,5 +1,5 @@
 import { AUTH_TOKEN_KEY } from '~/context/AuthContext';
-import { navigateTo } from '~/utils/navigation';
+import { openLogin } from '~/utils/loginFlow';
 
 const redirectToLogin = (() => {
   let redirectId: ReturnType<typeof setTimeout> | null = null;
@@ -11,9 +11,7 @@ const redirectToLogin = (() => {
 
     redirectId = setTimeout(() => {
       localStorage.removeItem(AUTH_TOKEN_KEY);
-      if (window.location.pathname !== '/login') {
-        navigateTo('/login', { from: { pathname: window.location.pathname } });
-      }
+      openLogin();
       redirectId = null;
     }, 1000);
   }

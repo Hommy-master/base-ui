@@ -1,5 +1,6 @@
 import { Button } from 'antd';
-import { getLoginModalStore, useLoginModalStore } from '../LoginModal/store';
+import { openLogin } from '~/utils/loginFlow';
+import { useLoginModalStore } from '../LoginModal/store';
 import { LockOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 
@@ -24,7 +25,7 @@ const LoginMask = () => {
             type="primary"
             icon={<LockOutlined className="mr-2" />}
             size="large"
-            onClick={() => (getLoginModalStore().open = true)}
+            onClick={() => openLogin()}
             className="pointer-events-auto relative overflow-hidden group mt-40"
             style={{
               padding: '16px 32px',

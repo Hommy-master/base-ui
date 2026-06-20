@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, type Location } from 'react-router-dom';
 import { UserLoginResult } from '~/services/login';
 import { getUserInfo } from '~/services/user';
-import { getLoginModalStore } from '~/components/LoginModal/store';
+import { closeLogin, completeLoginRedirect, openLogin } from '~/utils/loginFlow';
+import { isLoginModalMode } from '~/utils/config';
 
 export const LOGIN_CHANGE_EVENT = 'loginStateChange';
 
@@ -17,6 +18,14 @@ interface AuthContextType {
 export const AUTH_TOKEN_KEY = 'auth_token';
 
 const AuthContext = createContext<AuthContextType>(null!);
+
+function ModalLoginGate({ from }: { from: Location }) {
+  useEffect(() => {
+    openLogin(from);
+  }, [from.pathname, from.search, from.hash]);
+
+  return <Navigate to="/" replace />;
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userInfo, setUserInfo] = useState<Partial<UserLoginResult>>({});
@@ -49,10 +58,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
       localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(newData));
       setUserInfo(newData);
-      getLoginModalStore().open = false;
+      closeLogin();
       window.dispatchEvent(
         new CustomEvent(LOGIN_CHANGE_EVENT, { detail: { ...newData, state: 'login' } })
       );
+      completeLoginRedirect();
     } catch (error) {
       console.error('auth_token JSON 失败:', error);
     }
@@ -69,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     setUserInfo({});
     window.dispatchEvent(new CustomEvent(LOGIN_CHANGE_EVENT, { detail: { state: 'logout' } }));
-    getLoginModalStore().open = true;
+    openLogin();
   };
 
   const value: AuthContextType = {
@@ -89,7 +99,13 @@ export function ProtectedRoute() {
 
   if (loading) return null;
 
-  return userInfo?.id ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
+  if (userInfo?.id) return <Outlet />;
+
+  if (isLoginModalMode) {
+    return <ModalLoginGate from={location} />;
+  }
+
+  return <Navigate to="/login" state={{ from: location }} replace />;
 }
 
 export function useAuth() {

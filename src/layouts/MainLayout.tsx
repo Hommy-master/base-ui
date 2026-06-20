@@ -3,9 +3,10 @@ import { Outlet } from 'react-router-dom';
 
 import Header from '~/components/Header';
 import FloatCom from '~/components/Float';
+import LoginModal from '~/components/LoginModal';
 import { MobileBottomNav, SideNav } from '~/components/Nav';
 import { useResponsive } from '~/hooks';
-import { appConfig, isLeftNavLayout } from '~/utils/config';
+import { appConfig, isLeftNavLayout, isLoginModalMode } from '~/utils/config';
 
 const { Content } = Layout;
 
@@ -25,6 +26,7 @@ const MainLayout = () => {
     <Content className={contentClassName}>
       <Outlet />
       {appConfig.enableFloat && <FloatCom />}
+      {isLoginModalMode && <LoginModal />}
     </Content>
   );
 
