@@ -1,14 +1,12 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import type { NavigateFunction } from 'react-router-dom';
 import { AUTH_TOKEN_KEY } from '~/context/AuthContext';
-import { navigateTo } from '~/utils/navigation';
+import { clearAuthSession } from '~/services/authSession';
+import { handleBusinessResponse } from '~/services/responseHandlers';
+import type { BaseResponse } from '~/services/types';
 import { apiPath } from '~/utils/api';
 
-export interface BaseResponse<T = unknown> {
-  code: number;
-  message: string;
-  data: T;
-}
+export type { BaseResponse } from '~/services/types';
 
 export class AppError extends Error {
   errorMessage: string;
@@ -23,28 +21,6 @@ export class AppError extends Error {
     this.resp = resp;
   }
 }
-
-const SESSION_EXPIRED_CODE = 12010;
-
-const redirectToLogin = (() => {
-  let redirectId: ReturnType<typeof setTimeout> | null = null;
-
-  function redirect() {
-    if (redirectId) {
-      clearTimeout(redirectId);
-    }
-
-    redirectId = setTimeout(() => {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
-      if (window.location.pathname !== '/login') {
-        navigateTo('/login', { from: { pathname: window.location.pathname } });
-      }
-      redirectId = null;
-    }, 1000);
-  }
-
-  return redirect;
-})();
 
 axios.interceptors.request.use(
   (config) => {
@@ -75,13 +51,13 @@ export function setupHttpInterceptors(navigate: NavigateFunction) {
         if (error.response.status === 401) {
           const { pathname } = window.location;
           if (pathname !== '/login') {
-            localStorage.removeItem(AUTH_TOKEN_KEY);
+            clearAuthSession();
             navigate('/login', {
               replace: true,
               state: { from: { pathname } },
             });
-            return;
           }
+          return;
         }
 
         try {
@@ -112,10 +88,7 @@ export function setupHttpInterceptors(navigate: NavigateFunction) {
 export async function request<T>(url: string, options: AxiosRequestConfig = {}): Promise<T> {
   const { data } = await axios.request<T>({ url: apiPath(url), ...options });
 
-  const errorCode = (data as BaseResponse)?.code || 0;
-  if (errorCode === SESSION_EXPIRED_CODE) {
-    redirectToLogin();
-  }
+  handleBusinessResponse(data as BaseResponse);
 
   return data;
 }

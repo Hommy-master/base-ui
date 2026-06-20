@@ -52,11 +52,12 @@ cp .env.minimal.example .env
 
 默认 API 前缀为 `/openapi`，请求路径在 `services/` 中写相对路径（如 `/v1/user`），由 `src/utils/api.ts` 自动拼接。
 
-修改前缀只需三处保持一致：
+修改前缀只需两处保持一致：
 
 1. `.env` 中设置 `VITE_API_PREFIX=/your-prefix`
 2. `vite.config.mts` 会通过该变量配置 dev proxy（无需手改）
-3. `mock/_config.ts` 中的 `API_PREFIX` 与 `.env` 保持一致（Mock 开发时使用）
+
+Mock 路由通过 `mock/_config.ts` 自动读取同一环境变量，无需手动同步。
 
 ```ts
 // services/user.ts — 只需写相对路径
@@ -67,12 +68,12 @@ return await request('/v1/user', { method: 'get', params: { id } });
 
 ## Mock 数据
 
-| 场景      | 命令 / 配置                                                |
-| --------- | ---------------------------------------------------------- |
-| 启用 Mock | `.env` 中 `VITE_MOCK=true`，或运行 `pnpm dev:mock`         |
-| 关闭 Mock | `pnpm dev`（不带 mock 环境变量）                           |
-| Mock 文件 | `mock/` 目录，入口见 `mock/user.ts`                        |
-| 新增 Mock | 在 `mock/` 追加路由，URL 使用 `` `${API_PREFIX}/v1/...` `` |
+| 场景      | 命令 / 配置                                                                       |
+| --------- | --------------------------------------------------------------------------------- |
+| 启用 Mock | `.env` 中 `VITE_MOCK=true`，或运行 `pnpm dev:mock`                                |
+| 关闭 Mock | `pnpm dev`（不带 mock 环境变量）                                                  |
+| Mock 文件 | `mock/` 目录，入口见 `mock/user.ts`                                               |
+| 新增 Mock | 在 `mock/` 追加路由，URL 使用 `` `${API_PREFIX}/v1/...` ``（前缀自动读取 `.env`） |
 
 Mock 仅在开发环境生效，生产构建不会打包 mock 代码。
 
@@ -94,6 +95,7 @@ Mock 仅在开发环境生效，生产构建不会打包 mock 代码。
 
 ```
 src/
+├── layouts/            # 页面布局（MainLayout、AuthLayout）
 ├── utils/config.ts     # 应用配置（读取 .env）
 ├── utils/api.ts        # API 路径拼接
 ├── components/         # 通用组件（Header、Nav、LoginModal…）
@@ -101,7 +103,7 @@ src/
 ├── hooks/              # 自定义 Hooks
 ├── pages/              # 页面（Home、Login、404…）
 ├── routes/             # 路由 & 菜单配置
-├── services/           # API 请求层（http.ts 统一封装）
+├── services/           # API 层（http / 业务码 / 会话处理）
 ├── style/              # 全局 CSS
 └── utils/              # 工具函数
 ```
