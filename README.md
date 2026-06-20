@@ -18,36 +18,37 @@ cp .env.minimal.example .env
 
 ## 常用命令
 
-| 命令             | 说明                        |
-| ---------------- | --------------------------- |
-| `pnpm dev`       | 启动开发服务器（端口 8008） |
-| `pnpm dev:mock`  | 启用 Mock 数据开发          |
-| `pnpm build`     | 生产构建                    |
-| `pnpm preview`   | 预览构建产物                |
-| `pnpm lint`      | ESLint 检查                 |
-| `pnpm lint:css`  | Stylelint 检查 CSS          |
-| `pnpm typecheck` | TypeScript 类型检查         |
-| `pnpm test:run`  | 运行单元测试（单次）        |
-| `pnpm test`      | 运行单元测试（watch 模式）  |
+| 命令             | 说明                             |
+| ---------------- | -------------------------------- |
+| `pnpm dev`       | 启动开发服务器（端口 8008）      |
+| `pnpm dev:mock`  | 启用 Mock 数据开发               |
+| `pnpm build`     | 生产构建                         |
+| `pnpm preview`   | 预览构建产物                     |
+| `pnpm lint`      | ESLint 检查                      |
+| `pnpm lint:css`  | Stylelint 检查 CSS               |
+| `pnpm typecheck` | TypeScript 类型检查              |
+| `pnpm test:run`  | 运行单元测试（单次）             |
+| `pnpm test`      | 运行单元测试（watch 模式）       |
+| `pnpm validate`  | lint + typecheck + test 一键校验 |
 
 ## 环境变量
 
 复制 `.env.example` 为 `.env` 后修改：
 
-| 变量                      | 说明                      | 默认值                |
-| ------------------------- | ------------------------- | --------------------- |
-| `VITE_APP_TITLE`          | 应用名称                  | Base UI               |
-| `VITE_APP_DESCRIPTION`    | 应用描述                  | -                     |
-| `VITE_SITE_URL`           | 站点 URL                  | http://localhost:8008 |
-| `VITE_NAV_LAYOUT`         | 导航布局 `top` / `left`   | top                   |
-| `VITE_API_PREFIX`         | API 路径前缀              | `/openapi`            |
-| `VITE_API_PROXY_TARGET`   | 开发代理目标              | http://127.0.0.1:3000 |
-| `VITE_GTM_ID`             | Google Tag Manager ID     | 空（不启用）          |
-| `VITE_ENABLE_FLOAT`       | 是否显示悬浮客服          | true                  |
-| `VITE_AUTH_SCENE_ID`      | 扫码登录场景 ID           | default               |
-| `VITE_LOGIN_MODE`         | 登录方式 `page` / `modal` | page                  |
-| `VITE_CONTACT_QRCODE_URL` | 客服二维码图片 URL        | 空（不显示二维码）    |
-| `VITE_SUPPORT_TITLE`      | 客服悬浮窗标题            | `{应用名} 技术支持`   |
+| 变量                      | 说明                                               | 默认值                |
+| ------------------------- | -------------------------------------------------- | --------------------- |
+| `VITE_APP_TITLE`          | 应用名称（同步注入 `index.html` title / meta）     | Base UI               |
+| `VITE_APP_DESCRIPTION`    | 应用描述（同步注入 `index.html` meta description） | -                     |
+| `VITE_SITE_URL`           | 站点 URL                                           | http://localhost:8008 |
+| `VITE_NAV_LAYOUT`         | 导航布局 `top` / `left`                            | top                   |
+| `VITE_API_PREFIX`         | API 路径前缀                                       | `/openapi`            |
+| `VITE_API_PROXY_TARGET`   | 开发代理目标                                       | http://127.0.0.1:3000 |
+| `VITE_GTM_ID`             | Google Tag Manager ID                              | 空（不启用）          |
+| `VITE_ENABLE_FLOAT`       | 是否显示悬浮客服                                   | true                  |
+| `VITE_AUTH_SCENE_ID`      | 扫码登录场景 ID                                    | default               |
+| `VITE_LOGIN_MODE`         | 登录方式 `page` / `modal`                          | page                  |
+| `VITE_CONTACT_QRCODE_URL` | 客服二维码图片 URL                                 | 空（不显示二维码）    |
+| `VITE_SUPPORT_TITLE`      | 客服悬浮窗标题                                     | `{应用名} 技术支持`   |
 
 ## 自定义 API 前缀
 
@@ -92,7 +93,26 @@ Mock 仅在开发环境生效，生产构建不会打包 mock 代码。
 VITE_LOGIN_MODE=modal
 ```
 
-`modal` 模式下访问 `/login` 会自动重定向到首页并打开弹窗；登录成功后跳回 `returnTo` 记录的来源路径。
+`modal` 模式下：
+
+- 未登录访问受保护路由时**停留在当前 URL**，页面显示加载占位并自动打开登录弹窗（不会跳转到首页）
+- 直接访问 `/login` 会重定向到 `/` 并打开弹窗
+- 登录成功后跳回 `returnTo` 记录的来源路径
+
+### 登录状态事件（可选）
+
+若需在登录/退出时触发副作用（如刷新局部 UI），可使用 `useLoginChange`（`src/hooks/useLoginState.tsx`）：
+
+```tsx
+import { useLoginChange } from '~/hooks/useLoginState';
+
+function MyComponent() {
+  const loginVersion = useLoginChange();
+  // loginVersion 在 login / logout 时递增，可放入 effect 依赖
+}
+```
+
+内部监听 `AuthContext` 派发的 `LOGIN_CHANGE_EVENT`；常规场景请优先使用 `useAuth()`。
 
 ## 登录流程
 
@@ -125,10 +145,24 @@ src/
 └── utils/              # 工具函数
 ```
 
-## 新增受保护页面
+## 路由与登录（公开白名单）
+
+采用**白名单**控制公开页：**只有**加入白名单的路径未登录可访问，其余业务页默认需登录。
+
+| 配置方式                                             | 说明                                    |
+| ---------------------------------------------------- | --------------------------------------- |
+| `RoutesCfg` 中 `public: true`                        | 业务页加入白名单（如首页 `/`）          |
+| `src/routes/publicPaths.ts` 中 `SYSTEM_PUBLIC_PATHS` | 系统路由白名单（如 `/login`、`/error`） |
+| 未标记 `public` 的业务页                             | 默认需登录                              |
+
+工具函数 `isPublicPath(pathname)` / `getPublicPathWhitelist()` 可在鉴权、埋点等场景复用。
+
+系统路由 `/login`、`/error`、404 始终公开；404 不在白名单常量中，由路由层单独注册。
+
+## 新增需登录页面
 
 1. 在 `src/pages/` 创建页面组件
-2. 在 `src/routes/const.tsx` 的 `RoutesCfg` 追加配置：
+2. 在 `src/routes/const.tsx` 的 `RoutesCfg` 追加配置（**不要**设 `public`）：
 
 ```tsx
 {
@@ -139,8 +173,23 @@ src/
 },
 ```
 
-3. 路由会自动注册为受保护路由（需登录），并出现在导航菜单中
-4. 首页 `/`、`/login`、`/error` 不受保护；外链菜单项可设置 `href` 跳过路由注册
+3. 路由会自动注册为受保护路由，并出现在导航菜单中
+
+## 新增公开页面
+
+在 `RoutesCfg` 中追加并标记 `public: true`：
+
+```tsx
+{
+  path: '/about',
+  text: '关于',
+  icon: FaInfoCircle,
+  element: lazy(() => import('~/pages/About')),
+  public: true,
+},
+```
+
+外链菜单项可设置 `href` 跳过路由注册。
 
 ## 导航布局
 

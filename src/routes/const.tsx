@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, type ComponentType } from 'react';
 import type { IconType } from 'react-icons';
 import { FaHome } from 'react-icons/fa';
 
@@ -6,7 +6,8 @@ export interface RouteCfgType {
   path: string;
   text: string;
   icon: IconType;
-  element: React.FC | null;
+  element: ComponentType | null;  /** 加入公开白名单，未登录可访问；未标记则默认需登录 */
+  public?: boolean;
   href?: string;
   active?: boolean;
   hideInMenu?: boolean;
@@ -22,6 +23,13 @@ export interface RouteCfgType {
   }[];
 }
 
+/** 已注册页面路由（含 element，非外链） */
+export type AppRouteCfg = RouteCfgType & { element: ComponentType };
+
+export function isAppRoute(route: RouteCfgType): route is AppRouteCfg {
+  return route.element != null && !route.href;
+}
+
 export const LoginRoute = lazy(() => import('~/pages/Login'));
 export const HomePage = lazy(() => import('~/pages/Home'));
 export const ErrorPage = lazy(() => import('~/pages/Error'));
@@ -33,5 +41,6 @@ export const RoutesCfg: RouteCfgType[] = [
     text: '首页',
     icon: FaHome,
     element: HomePage,
+    public: true,
   },
 ];

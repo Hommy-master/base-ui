@@ -4,7 +4,7 @@ import LoginModal from '~/components/LoginModal';
 import LoginMask from '~/components/LoginMask';
 import { useAppSEO } from '~/hooks/useAppSEO';
 import { useAuth } from '~/context/AuthContext';
-import { openLogin } from '~/utils/loginFlow';
+import { buildReturnPath, openLogin, type LoginFrom } from '~/utils/loginFlow';
 
 import './index.css';
 
@@ -27,8 +27,9 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (userInfo?.id) {
-      const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/';
-      navigate(from, { replace: true });
+      const from = (location.state as { from?: LoginFrom })?.from;
+      const returnTo = from?.pathname ? buildReturnPath(from) : '/';
+      navigate(returnTo, { replace: true });
     }
   }, [userInfo?.id, location.state, navigate]);
 

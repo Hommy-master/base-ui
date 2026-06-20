@@ -7,13 +7,17 @@ import { isLoginPageMode } from '~/utils/config';
 import { AuthLayout, MainLayout } from '~/layouts';
 import GtmRouterTracker from './gtmRouterTracker';
 import NotFound from '~/pages/404';
-import { LoginRoute, HomePage, ErrorPage, RoutesCfg } from './const';
+import { LoginRoute, ErrorPage, RoutesCfg, isAppRoute } from './const';
 
 const PageFallback = () => (
   <div className="flex size-full items-center justify-center">
     <Spin size="large" />
   </div>
 );
+
+const menuRoutes = RoutesCfg.filter(isAppRoute);
+const publicRoutes = menuRoutes.filter((route) => route.public);
+const protectedRoutes = menuRoutes.filter((route) => !route.public);
 
 const AppRoutes = () => {
   const navigate = useNavigate();
@@ -37,12 +41,15 @@ const AppRoutes = () => {
           )}
 
           <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
+            {publicRoutes.map((route) => {
+              const Page = route.element;
+              return <Route key={route.path} path={route.path} element={<Page />} />;
+            })}
             <Route path="/error" element={<ErrorPage />} />
             <Route element={<ProtectedRoute />}>
-              {RoutesCfg.map((route) => {
-                if (!route.element || route.path === '/') return null;
-                return <Route key={route.path} path={route.path} element={<route.element />} />;
+              {protectedRoutes.map((route) => {
+                const Page = route.element;
+                return <Route key={route.path} path={route.path} element={<Page />} />;
               })}
             </Route>
             <Route path="*" element={<NotFound />} />

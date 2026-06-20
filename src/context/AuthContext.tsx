@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation, type Location } from 'react-router-dom';
+import { Spin } from 'antd';
 import { UserLoginResult } from '~/services/login';
 import { getUserInfo } from '~/services/user';
 import { closeLogin, completeLoginRedirect, openLogin } from '~/utils/loginFlow';
 import { isLoginModalMode } from '~/utils/config';
 
+/** @deprecated 请优先使用 AuthContext；保留供 useLoginChange 监听 */
 export const LOGIN_CHANGE_EVENT = 'loginStateChange';
 
 interface AuthContextType {
@@ -19,12 +21,18 @@ export const AUTH_TOKEN_KEY = 'auth_token';
 
 const AuthContext = createContext<AuthContextType>(null!);
 
+const AuthLoading = () => (
+  <div className="flex min-h-[40vh] size-full items-center justify-center">
+    <Spin size="large" />
+  </div>
+);
+
 function ModalLoginGate({ from }: { from: Location }) {
   useEffect(() => {
     openLogin(from);
-  }, [from.pathname, from.search, from.hash]);
+  }, [from]);
 
-  return <Navigate to="/" replace />;
+  return <AuthLoading />;
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -90,14 +98,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchUserInfo,
   };
 
-  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+  if (loading) {
+    return (
+      <AuthContext.Provider value={value}>
+        <div className="flex min-h-screen items-center justify-center">
+          <Spin size="large" />
+        </div>
+      </AuthContext.Provider>
+    );
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function ProtectedRoute() {
   const location = useLocation();
   const { userInfo, loading } = useAuth();
 
-  if (loading) return null;
+  if (loading) return <AuthLoading />;
 
   if (userInfo?.id) return <Outlet />;
 

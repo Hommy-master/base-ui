@@ -13,6 +13,8 @@ function buildReturnPath(from?: LoginFrom) {
   return `${pathname}${search}${hash}`;
 }
 
+export { buildReturnPath };
+export type { LoginFrom };
 /** 按 VITE_LOGIN_MODE 打开登录页或登录弹窗 */
 export function openLogin(from?: LoginFrom) {
   if (isLoginModalMode) {
@@ -29,7 +31,13 @@ export function openLogin(from?: LoginFrom) {
     return;
   }
 
-  navigateTo('/login', { from: { pathname } });
+  navigateTo('/login', {
+    from: {
+      pathname,
+      search: from?.search ?? '',
+      hash: from?.hash ?? '',
+    },
+  });
 }
 
 export function closeLogin() {

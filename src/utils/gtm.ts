@@ -27,13 +27,3 @@ export const trackEvent = (eventName: string, params: Record<string, any> = {}) 
     ...params,
   });
 };
-
-// 扩展 Window 接口确保类型安全
-declare global {
-  interface Window {
-    dataLayer: Array<{
-      event: string;
-      [key: string]: any;
-    }>;
-  }
-}

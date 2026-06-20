@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => {
 
   const apiPrefix = env.VITE_API_PREFIX || '/openapi';
   const useMock = env.VITE_MOCK === 'true' || process.env.VITE_MOCK === 'true';
+  const appTitle = env.VITE_APP_TITLE || 'Base UI';
+  const appDescription =
+    env.VITE_APP_DESCRIPTION || '基于 React + Vite + Ant Design 的前端项目模板';
 
   return {
     clearScreen: false,
@@ -48,6 +51,12 @@ export default defineConfig(({ mode }) => {
       svg({ svgrOptions: { icon: true } }),
       createHtmlPlugin({
         minify: true,
+        inject: {
+          data: {
+            title: appTitle,
+            description: appDescription,
+          },
+        },
       }),
     ],
     css: {

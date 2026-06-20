@@ -56,7 +56,7 @@ export function setupHttpInterceptors(navigate: NavigateFunction) {
           if (isLoginPageMode && pathname !== '/login') {
             navigate('/login', {
               replace: true,
-              state: { from: { pathname } },
+              state: { from: { pathname, search, hash } },
             });
           } else {
             openLogin({ pathname, search, hash });

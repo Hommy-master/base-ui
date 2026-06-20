@@ -1,4 +1,3 @@
-import { Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 
 /** 登录 / 注册等无导航壳的页面布局 */
