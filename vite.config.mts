@@ -26,6 +26,12 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         treeshake: 'recommended',
+        output: {
+          manualChunks: {
+            react: ['react', 'react-dom', 'react-router-dom'],
+            antd: ['antd', '@ant-design/icons'],
+          },
+        },
       },
       sourcemap: process.env.GENERATE_SOURCEMAP === 'false' ? false : true,
       outDir: 'dist',

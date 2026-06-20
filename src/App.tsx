@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import ErrorBoundary from '~/components/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import AppRoutes from './routes';
 import { setGlobalNavigate } from './utils/navigation';
-import LoginModal from './components/LoginModal';
 
 function App() {
   const navigate = useNavigate();
@@ -17,10 +17,11 @@ function App() {
   }, [navigate]);
 
   return (
-    <AuthProvider>
-      <AppRoutes />
-      <LoginModal />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

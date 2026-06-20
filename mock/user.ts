@@ -12,30 +12,6 @@ export default [
     }),
   },
   {
-    url: `${API_PREFIX}/v1/user/update/name`,
-    method: 'post',
-    response: () => ({
-      code: 0,
-      data: { name: 'New_userName' },
-    }),
-  },
-  {
-    url: `${API_PREFIX}/v1/user/update/api_token`,
-    method: 'post',
-    response: () => ({
-      code: 0,
-      data: { apiKey: 'mock-api-key' },
-    }),
-  },
-  {
-    url: `${API_PREFIX}/v1/user/update/exchange_code`,
-    method: 'post',
-    response: () => ({
-      code: 0,
-      data: {},
-    }),
-  },
-  {
     url: `${API_PREFIX}/v1/user/auth/qrcode`,
     method: 'get',
     response: () => ({

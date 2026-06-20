@@ -24,6 +24,7 @@ export interface RouteCfgType {
 
 export const LoginRoute = lazy(() => import('~/pages/Login'));
 export const HomePage = lazy(() => import('~/pages/Home'));
+export const ErrorPage = lazy(() => import('~/pages/Error'));
 
 /** 导航菜单 & 受保护路由配置，新增页面在此追加 */
 export const RoutesCfg: RouteCfgType[] = [

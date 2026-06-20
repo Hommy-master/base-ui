@@ -115,7 +115,7 @@ src/
 ├── layouts/            # 页面布局（MainLayout、AuthLayout）
 ├── utils/config.ts     # 应用配置（读取 .env）
 ├── utils/api.ts        # API 路径拼接
-├── components/         # 通用组件（Header、Nav、LoginModal…）
+├── components/         # 通用组件（Header、Nav、LoginModal、ErrorBoundary…）
 ├── context/            # React Context（AuthContext）
 ├── hooks/              # 自定义 Hooks
 ├── pages/              # 页面（Home、Login、404…）
@@ -140,7 +140,7 @@ src/
 ```
 
 3. 路由会自动注册为受保护路由（需登录），并出现在导航菜单中
-4. 首页 `/` 和 `/login` 不受保护；外链菜单项可设置 `href` 跳过路由注册
+4. 首页 `/`、`/login`、`/error` 不受保护；外链菜单项可设置 `href` 跳过路由注册
 
 ## 导航布局
 

@@ -4,7 +4,7 @@ import LoginModal from '~/components/LoginModal';
 import LoginMask from '~/components/LoginMask';
 import { useAppSEO } from '~/hooks/useAppSEO';
 import { useAuth } from '~/context/AuthContext';
-import { getLoginModalStore } from '~/components/LoginModal/store';
+import { openLogin } from '~/utils/loginFlow';
 
 import './index.css';
 
@@ -22,8 +22,8 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    getLoginModalStore().open = true;
-  }, []);
+    openLogin(location);
+  }, [location]);
 
   useEffect(() => {
     if (userInfo?.id) {

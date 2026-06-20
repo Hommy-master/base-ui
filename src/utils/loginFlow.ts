@@ -24,7 +24,10 @@ export function openLogin(from?: LoginFrom) {
   }
 
   const pathname = from?.pathname ?? window.location.pathname;
-  if (pathname === '/login') return;
+  if (pathname === '/login') {
+    getLoginModalStore().open = true;
+    return;
+  }
 
   navigateTo('/login', { from: { pathname } });
 }
