@@ -7,7 +7,7 @@
 sitemap.xml
 
 # env（保留示例文件）
-.env
+# .env
 .env.local
 .env.*.local
 
