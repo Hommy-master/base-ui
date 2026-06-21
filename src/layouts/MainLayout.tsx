@@ -32,7 +32,7 @@ const MainLayout = () => {
 
   if (isPhone) {
     return (
-      <Layout className={`zt-app zt-app--mobile ${isLeftNavLayout ? 'zt-app--left-nav' : 'zt-app--top-nav'}`}>
+      <Layout className="zt-app zt-app--mobile">
         <MobileBottomNav />
         {mainContent}
       </Layout>

@@ -78,7 +78,7 @@ const TopNav = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <Flex className="flex-1 zt-nav-ct" justify="flex-end" align="center">
+    <Flex className="flex-1 zt-nav-ct" justify="space-between" align="center" gap={16}>
       {isMobile ? (
         <>
           <div className="custom-toggler mr-2" onClick={() => setShowMenu(!showMenu)}>
